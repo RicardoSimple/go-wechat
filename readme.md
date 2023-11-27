@@ -24,8 +24,6 @@ wexin sdk 对微信公众平台的集成环境
 	api.GetAccessToken(ctx)
 ```
 
-
-
 ## 开发注意事项：
 
 官方文档:[开发前必读 / 首页 (qq.com)](https://developers.weixin.qq.com/doc/offiaccount/Getting_Started/Overview.html)

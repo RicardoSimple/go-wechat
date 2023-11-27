@@ -44,3 +44,29 @@ func (api *WexinApi) GetAccessToken(ctx context.Context) (string, error) {
 
 	return accessToken, nil
 }
+
+// GetStableAccessToken 获取稳定accesstoken
+func (api *WexinApi) GetStableAccessToken(ctx context.Context) (string, error) {
+	var req conf.StableAccessReq
+	cfg := api
+	req.GrantType = "client_credential"
+	req.AppId = cfg.AppId
+	req.Secret = cfg.AppSecret
+	req.ForceRefresh = false
+	var resp conf.AccessTokenResp
+
+	fmt.Println(req)
+	//{grant_type:"client_credential",appid: "wx1092b036ca86acce",secret: "67af2e7c617064586b5dbe16a2e1a0f0",force_refresh: false}
+	url := cfg.ServerHost + conf.GetStableAccessTokenApi
+
+	err := http.Post(ctx, url, nil, req, &resp, nil)
+	fmt.Println(resp)
+
+	if err != nil {
+		fmt.Println("eror")
+		return "", err
+	} else if resp.ErrorMsg != "" {
+		return "", fmt.Errorf(resp.ErrorMsg)
+	}
+	return resp.AccessToken, nil
+}
