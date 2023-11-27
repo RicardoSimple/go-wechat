@@ -13,3 +13,14 @@ type StableAccessReq struct {
 	Secret       string `json:"secret"`
 	ForceRefresh bool   `json:"force_refresh"` // true:force fresh token
 }
+
+type GeneralResp struct {
+	ErrCode int    `json:"errcode"`
+	ErrMsg  string `json:"errmsg"`
+}
+
+type GetMenuResp struct {
+	IsMenuOpen   int  `json:"is_menu_open"`
+	SelfMenuInfo Menu `json:"selfmenu_info"`
+	GeneralResp
+}

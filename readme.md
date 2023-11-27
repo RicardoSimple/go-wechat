@@ -72,7 +72,7 @@ func (api *WexinApi) GetAccessToken(ctx context.Context) (string, error) {}
 
 + 自动接入 ☑️
 
-+ 自定义菜单
++ 自定义菜单 ☑️
 
 + 个性化菜单
 
