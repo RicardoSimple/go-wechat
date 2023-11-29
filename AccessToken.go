@@ -1,10 +1,8 @@
 package go_wechat
 
 import (
-	"context"
 	"fmt"
 	"go-wechat/conf"
-	"go-wechat/wechat_tools/http"
 	"sync"
 	"time"
 )
@@ -15,9 +13,14 @@ var (
 	accessTokenExpire time.Time
 )
 
+const (
+	GetAccessTokenApi       = "/cgi-bin/token"
+	GetStableAccessTokenApi = "/cgi-bin/stable_token"
+)
+
 // GetAccessToken 获取access_token，如果token已缓存且未过期，则直接返回缓存的token
 // 否则，调用微信接口获取新的token，并更新缓存 904ms->284ms
-func (api *WexinApi) GetAccessToken(ctx context.Context) (string, error) {
+func (api *WexinApi) GetAccessToken() (string, error) {
 	// 检查缓存是否有效
 	tokenMu.Lock()
 	defer tokenMu.Unlock() // 使用 defer 语句确保在函数返回之前释放锁
@@ -31,8 +34,7 @@ func (api *WexinApi) GetAccessToken(ctx context.Context) (string, error) {
 	appID := cfg.AppId
 	secret := cfg.AppSecret
 	var resp conf.AccessTokenResp
-	url := cfg.ServerHost + conf.GetAccessTokenApi
-	err := http.Get(ctx, url+"?grant_type=client_credential&appid="+appID+"&secret="+secret, nil, &resp, nil)
+	err := api.WxClient.Get(GetAccessTokenApi+"?grant_type=client_credential&appid="+appID+"&secret="+secret, nil, &resp, nil, false)
 	if err != nil {
 		return "", err
 	} else if resp.ErrorMsg != "" {
@@ -41,12 +43,13 @@ func (api *WexinApi) GetAccessToken(ctx context.Context) (string, error) {
 	// 更新缓存
 	accessToken = resp.AccessToken
 	accessTokenExpire = time.Now().Add(time.Second * time.Duration(resp.ExpiresIn))
+	api.Logger.Println("access " + accessToken)
 
 	return accessToken, nil
 }
 
 // GetStableAccessToken 获取稳定accesstoken
-func (api *WexinApi) GetStableAccessToken(ctx context.Context) (string, error) {
+func (api *WexinApi) GetStableAccessToken() (string, error) {
 	var req conf.StableAccessReq
 	cfg := api
 	req.GrantType = "client_credential"
@@ -57,9 +60,7 @@ func (api *WexinApi) GetStableAccessToken(ctx context.Context) (string, error) {
 
 	fmt.Println(req)
 	//{grant_type:"client_credential",appid: "wx1092b036ca86acce",secret: "67af2e7c617064586b5dbe16a2e1a0f0",force_refresh: false}
-	url := cfg.ServerHost + conf.GetStableAccessTokenApi
-
-	err := http.Post(ctx, url, nil, req, &resp, nil)
+	err := api.WxClient.Post(GetStableAccessTokenApi, nil, req, &resp, nil, false)
 	fmt.Println(resp)
 
 	if err != nil {

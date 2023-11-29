@@ -12,12 +12,3 @@ const (
 	// ServerHostHongKong 香港域名
 	ServerHostHongKong = "https://hk.api.weixin.qq.com"
 )
-
-// 接口api
-const (
-	GetAccessTokenApi       = "/cgi-bin/token"
-	GetStableAccessTokenApi = "/cgi-bin/stable_token"
-	CreateMenuApi           = "/cgi-bin/menu/create"
-	GetMenuConfigApi        = "/cgi-bin/get_current_selfmenu_info"
-	DeleteMenuApi           = "/cgi-bin/menu/delete"
-)

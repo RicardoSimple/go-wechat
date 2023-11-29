@@ -8,20 +8,20 @@ wexin sdk 对微信公众平台的集成环境
 
 ### 使用方法:
 
-```go
-	api, err := StartWeixinApi(
-		WexinApi{
-			AppId:          "your appId",
-			AppSecret:      "your appsecret",
-			Token:          "your config token",    // 需要与公众号配置一致，这里可不填
-			ServerHost:     conf.ServerHostGeneral, //选取最近的服务器域名，默认为api.weixin.qq.com
-			EncodingAESKey: "your config",
-		})
-	if err != nil {
-		return
-	}
-	// 调用具体方法，传入context或其他参数
-	api.GetAccessToken(ctx)
+```
+    api, err := StartWeixinApi(
+        WexinApi{
+            AppId:          "your appId",
+            AppSecret:      "your appsecret",
+            Token:          "your config token",    // 需要与公众号配置一致，这里可不填
+            ServerHost:     conf.ServerHostGeneral, //选取最近的服务器域名，默认为api.weixin.qq.com
+            EncodingAESKey: "your config",
+        })
+    if err != nil {
+        return
+    }
+    // 调用具体方法，传入context或其他参数
+    api.GetAccessToken(ctx)
 ```
 
 ## 开发注意事项：
@@ -44,26 +44,24 @@ wexin sdk 对微信公众平台的集成环境
   
   + wechat_params为封装过程产生的变量,比如请求参数等
 
-+ wechat_tools 工具包
-  
-  + http 为已封装的请求包
++ util 工具包
 
-新增的接口需要在const中定义,例如:
+新增的接口需要在对应文件下的const中定义,例如:
 
-```go
+```
 // 接口api
 const (
-	GetAccessTokenApi       = "/cgi-bin/token"
-	GetStableAccessTokenApi = "/cgi-bin/stable_token"
+    GetAccessTokenApi       = "/cgi-bin/token"
+    GetStableAccessTokenApi = "/cgi-bin/stable_token"
 )
 ```
 
 需要新增的封装方法按照模块化的名称直接在根目录新增文件,随后写具体代码
 
-注:每个最后暴露的封装方法需要与结构体WeixinApi绑定,比如:
+注:每个请求类型的抽象方法需要传入WeixinApi的参数,比如:
 
-```go
-func (api *WexinApi) GetAccessToken(ctx context.Context) (string, error) {}
+```
+func CreateMenu(api *go_wechat.WexinApi, menu *conf.Menu) error {}
 ```
 
 另外接口的访问需要传递accesstoken参数,通过上述方法即可获取,避免自己请求新的token
@@ -99,11 +97,11 @@ func (api *WexinApi) GetAccessToken(ctx context.Context) (string, error) {}
 + 素材管理
 
 + 用户管理
+  
+  + 用户标签管理
 
 + 账号管理
 
 + 数据统计
 
 注:不同的公众号类型对应的接口权限不同,详见:[接口权限说明](https://developers.weixin.qq.com/doc/offiaccount/Getting_Started/Explanation_of_interface_privileges.html)
-
-
