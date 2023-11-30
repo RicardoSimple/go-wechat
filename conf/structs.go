@@ -14,3 +14,17 @@ type TopItem struct {
 type Menu struct {
 	Buttons []TopItem `json:"button"`
 }
+
+type LangParam string
+
+type TagList struct {
+	Tags []Tag `json:"tags"`
+}
+type Tag struct {
+	Id    int    `json:"id"`
+	Name  string `json:"name"`
+	Count int    `json:"count"`
+}
+type OpenIdList struct {
+	Openid []string `json:"openid"`
+}

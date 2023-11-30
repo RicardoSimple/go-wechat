@@ -12,3 +12,10 @@ const (
 	// ServerHostHongKong 香港域名
 	ServerHostHongKong = "https://hk.api.weixin.qq.com"
 )
+
+const (
+	DEFAULT LangParam = ""
+	ZH_CN   LangParam = "zh_CN"
+	ZH_TW   LangParam = "zh_TW"
+	EN      LangParam = "en"
+)
